@@ -1,0 +1,2 @@
+# Zaytrix
+Untuk crypto
