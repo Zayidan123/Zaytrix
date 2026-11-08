@@ -8,7 +8,7 @@ function money(n) {
   return Number(n).toLocaleString();
 }
 
-export default function Dashboard({ coins, global }) {
+export default function Dashboard({ coins, global, onchain, whales }) {
   const [page, setPage] = useState(1);
   const perPage = 25;
   const totalPages = Math.ceil(coins.length / perPage);
@@ -22,6 +22,7 @@ export default function Dashboard({ coins, global }) {
           <h1 className="text-2xl md:text-3xl font-bold">Zaytrix Market</h1>
           <div className="flex gap-3 text-sm">
             <Link href="/dashboard" className="text-blue-600">Dashboard</Link>
+            <Link href="/onchain" className="text-blue-600">On-Chain</Link>
             <button onClick={() => router.post('/logout')} className="text-red-600">Logout</button>
           </div>
         </div>

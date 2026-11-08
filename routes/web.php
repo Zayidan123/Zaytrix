@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Auth\TwoFactorController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MarketController;
+use App\Http\Controllers\OnChainController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -20,6 +21,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/2fa/verify', [TwoFactorController::class, 'verify'])->name('2fa.verify');
     Route::get('/dashboard', [MarketController::class,'index'])->name('dashboard');
     Route::get('/market', [MarketController::class,'index'])->name('market');
+    Route::get('/onchain', [OnChainController::class,'index'])->name('onchain');
 });
 
 Route::get('/', fn() => redirect()->route('dashboard'));
