@@ -25,3 +25,14 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/', fn() => redirect()->route('dashboard'));
+
+// AI Routes (Fase 4)
+Route::middleware('auth')->group(function () {
+    Route::get('/ai/chat', [\App\Http\Controllers\AiController::class, 'chat'])->name('ai.chat');
+    Route::post('/ai/chat/stream', [\App\Http\Controllers\AiController::class, 'streamChat'])->name('ai.chat.stream');
+    Route::get('/ai/signal', [\App\Http\Controllers\AiController::class, 'signalForm'])->name('ai.signal');
+    Route::post('/ai/signal', [\App\Http\Controllers\AiController::class, 'generateSignal'])->name('ai.signal.generate');
+    Route::get('/ai/compare', [\App\Http\Controllers\AiController::class, 'compareForm'])->name('ai.compare');
+    Route::post('/ai/compare', [\App\Http\Controllers\AiController::class, 'comparePdfs'])->name('ai.compare.generate');
+    Route::post('/ai/documents', [\App\Http\Controllers\AiController::class, 'uploadDocument'])->name('ai.documents.upload');
+});
