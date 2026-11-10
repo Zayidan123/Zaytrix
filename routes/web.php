@@ -64,3 +64,27 @@ Route::get('/portfolio', fn() => inertia('Portfolio/Index', ['initialSummary' =>
 Route::get('/portfolio/transactions', fn() => inertia('Portfolio/Transactions'))->name('portfolio.transactions');
 Route::get('/paper-trading', fn() => inertia('PaperTrading/Index'))->name('paper.trading');
 Route::get('/settings/alerts', fn() => inertia('Settings/Alerts'))->name('settings.alerts');
+
+// News
+Route::middleware('auth')->prefix('api')->group(function () {
+    Route::get('/news', [NewsController::class, 'index']);
+    Route::get('/news/high-impact', [NewsController::class, 'highImpact']);
+    Route::post('/news/refresh', [NewsController::class, 'refresh']);
+});
+
+// Settings
+Route::middleware('auth')->prefix('api')->group(function () {
+    Route::get('/settings', [SettingsController::class, 'index']);
+    Route::patch('/settings/profile', [SettingsController::class, 'updateProfile']);
+    Route::patch('/settings/password', [SettingsController::class, 'updatePassword']);
+    Route::patch('/settings/theme', [SettingsController::class, 'updateTheme']);
+    Route::get('/settings/api-health', [SettingsController::class, 'apiHealth']);
+    // Admin
+    Route::get('/settings/users', [SettingsController::class, 'users']);
+    Route::post('/settings/users', [SettingsController::class, 'createUser']);
+    Route::delete('/settings/users/{id}', [SettingsController::class, 'deleteUser']);
+});
+
+// Inertia Pages Fase 6
+Route::get('/news', fn() => inertia('News/Index'))->name('news');
+Route::get('/settings', fn() => inertia('Settings/Index'))->name('settings');

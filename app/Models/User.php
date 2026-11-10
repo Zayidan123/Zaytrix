@@ -12,7 +12,7 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $fillable = [
-        'name', 'email', 'password', 'role', 'google_id', 'avatar',
+        'name', 'email', 'password', 'role', 'google_id', 'avatar', 'is_admin',
     ];
 
     protected $hidden = [
@@ -24,13 +24,22 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_admin' => 'boolean',
         ];
     }
 
     public function isAdmin(): bool
     {
-        return $this->role === 'admin';
+        return $this->is_admin || $this->role === 'admin';
     }
 
-    public function totpSecret(){ return $this->hasOne(\App\Models\TotpSecret::class); }
+    public function settings()
+    {
+        return $this->hasOne(UserSetting::class);
+    }
+
+    public function totpSecret()
+    {
+        return $this->hasOne(TotpSecret::class);
+    }
 }
