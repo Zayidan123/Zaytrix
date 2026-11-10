@@ -5,6 +5,9 @@ use App\Http\Controllers\Auth\TwoFactorController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MarketController;
 use App\Http\Controllers\OnChainController;
+use App\Http\Controllers\PortfolioController;
+use App\Http\Controllers\PaperTradingController;
+use App\Http\Controllers\AlertController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -36,3 +39,28 @@ Route::middleware('auth')->group(function () {
     Route::post('/ai/compare', [\App\Http\Controllers\AiController::class, 'comparePdfs'])->name('ai.compare.generate');
     Route::post('/ai/documents', [\App\Http\Controllers\AiController::class, 'uploadDocument'])->name('ai.documents.upload');
 });
+
+// Portfolio
+Route::middleware('auth')->prefix('api')->group(function () {
+    Route::get('/portfolio/summary', [PortfolioController::class, 'summary']);
+    Route::post('/portfolio/transaction', [PortfolioController::class, 'store']);
+    Route::get('/portfolio/history', [PortfolioController::class, 'history']);
+
+    // Paper Trading
+    Route::post('/paper/trade', [PaperTradingController::class, 'store']);
+    Route::get('/paper/summary', [PaperTradingController::class, 'summary']);
+    Route::get('/paper/trades', [PaperTradingController::class, 'index']);
+
+    // Alerts
+    Route::get('/alerts', [AlertController::class, 'index']);
+    Route::post('/alerts', [AlertController::class, 'store']);
+    Route::delete('/alerts/{id}', [AlertController::class, 'destroy']);
+    Route::get('/alerts/notifications', [AlertController::class, 'notifications']);
+    Route::patch('/alerts/notifications/{id}/read', [AlertController::class, 'markRead']);
+});
+
+// Inertia Pages for Fase 5
+Route::get('/portfolio', fn() => inertia('Portfolio/Index', ['initialSummary' => null]))->name('portfolio');
+Route::get('/portfolio/transactions', fn() => inertia('Portfolio/Transactions'))->name('portfolio.transactions');
+Route::get('/paper-trading', fn() => inertia('PaperTrading/Index'))->name('paper.trading');
+Route::get('/settings/alerts', fn() => inertia('Settings/Alerts'))->name('settings.alerts');
