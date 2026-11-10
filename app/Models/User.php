@@ -38,6 +38,11 @@ class User extends Authenticatable
         return $this->hasOne(UserSetting::class);
     }
 
+    public function webauthnCredentials()
+    {
+        return $this->hasMany(WebauthnCredential::class);
+    }
+
     public function totpSecret()
     {
         return $this->hasOne(TotpSecret::class);

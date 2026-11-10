@@ -88,7 +88,7 @@ class KnowledgeBaseService
         return file_get_contents($path) ?: '';
     }
 
-    private function chunkText(string $text): array
+    public function chunkText(string $text): array
     {
         $text = preg_replace('/\s+/', ' ', trim($text));
         $words = explode(' ', $text);

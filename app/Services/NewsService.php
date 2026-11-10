@@ -115,16 +115,26 @@ class NewsService
             ->get();
         Cache::put('news:high_impact', $highImpact, 300);
 
+        // Clear cache for getLatest and getHighImpact
+        Cache::forget('news:latest:50');
+        Cache::forget('news:high_impact:10');
+
         return $stored;
     }
 
     public function getLatest(int $limit = 50): \Illuminate\Database\Eloquent\Collection
     {
-        return News::latest('published_at')->limit($limit)->get();
+        $cacheKey = "news:latest:{$limit}";
+        return Cache::remember($cacheKey, 300, function () use ($limit) {
+            return News::latest('published_at')->limit($limit)->get();
+        });
     }
 
     public function getHighImpact(int $limit = 10): \Illuminate\Database\Eloquent\Collection
     {
-        return News::where('high_impact', true)->latest('published_at')->limit($limit)->get();
+        $cacheKey = "news:high_impact:{$limit}";
+        return Cache::remember($cacheKey, 300, function () use ($limit) {
+            return News::where('high_impact', true)->latest('published_at')->limit($limit)->get();
+        });
     }
 }

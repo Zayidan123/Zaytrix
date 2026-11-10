@@ -45,4 +45,14 @@ class AlertService
             $this->checkAlerts($userId);
         }
     }
+
+    public function markRead(int $notificationId): bool
+    {
+        $notification = Notification::find($notificationId);
+        if ($notification) {
+            $notification->update(['read' => true]);
+            return true;
+        }
+        return false;
+    }
 }

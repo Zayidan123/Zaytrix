@@ -88,3 +88,15 @@ Route::middleware('auth')->prefix('api')->group(function () {
 // Inertia Pages Fase 6
 Route::get('/news', fn() => inertia('News/Index'))->name('news');
 Route::get('/settings', fn() => inertia('Settings/Index'))->name('settings');
+
+// WebAuthn
+Route::middleware('auth')->prefix('api')->group(function () {
+    Route::get('/webauthn/register/options', [WebAuthnController::class, 'registrationOptions']);
+    Route::post('/webauthn/register', [WebAuthnController::class, 'storeCredential']);
+    Route::get('/webauthn/login/options', [WebAuthnController::class, 'authenticationOptions']);
+    Route::post('/webauthn/login', [WebAuthnController::class, 'authenticate']);
+    Route::get('/webauthn/credentials', [WebAuthnController::class, 'listCredentials']);
+    Route::delete('/webauthn/credentials/{id}', [WebAuthnController::class, 'deleteCredential']);
+});
+
+Route::get('/settings/webauthn', fn() => inertia('WebAuthn/Index', ['initialCredentials' => null]))->name('webauthn')->middleware('auth');
